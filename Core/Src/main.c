@@ -538,12 +538,16 @@ void DynamixelProtocal2(uint8_t *Memory, uint8_t MotorID, int16_t dataIn,
 			case 0x03://WRITE
 			{
 				//LAB
-				uint64_t sum = 0;
+				/*uint64_t sum = 0;
 				for(int i = 2 ; i < CollectedData ; i++){
 					sum |= parameter[i] << (8*(i-2));
 				}
-
 				Memory[parameter[0] | (parameter[1]<<8)] = sum;
+				*/
+
+				for(int i = 2 ;i < CollectedData ; i++){
+					Memory[parameter[0] | (parameter[1]<<8) + (i-2)] = parameter[i];
+				}
 
 				uint8_t temp[] = {0xff,0xff,0xfd,0x00,MotorID,0x04,0x00,0x55,0x00,0x00,0x00};
 				uint16_t crc_calc = update_crc(0,temp,9);
